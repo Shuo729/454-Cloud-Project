@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudSnap - Photo Sharing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">CloudSnap</a>
+            <nav class="nav-menu">
+                <div class="nav-item active" data-tab="explore">Explore</div>
+                <div class="nav-item" data-tab="albums">Albums</div>
+                <div class="nav-item" data-tab="profile">Profile</div>
+            </nav>
+            <div class="user-actions">
+                <div class="profile-avatar" id="profileAvatar">A</div>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Explore Tab -->
+        <div id="exploreTab" class="tab-content">
+            <div class="section-header">
+                <h1 class="section-title">Explore</h1>
+                <button class="upload-btn" id="uploadBtnExplore">Upload Photo</button>
+            </div>
+            
+            <div class="content-grid" id="photosGrid">
+                <!-- Photos will be populated here -->
+            </div>
+        </div>
+
+        <!-- Albums Tab -->
+        <div id="albumsTab" class="tab-content" style="display: none;">
+            <div class="section-header">
+                <h1 class="section-title">Your Albums</h1>
+                <div class="album-create">
+                    <input type="text" class="album-input" id="albumName" placeholder="Album name">
+                    <button class="upload-btn" id="createAlbumBtn">Create Album</button>
+                </div>
+            </div>
+            
+            <div class="content-grid" id="albumsGrid">
+                <!-- Albums will be populated here -->
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profileTab" class="tab-content" style="display: none;">
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar-large">A</div>
+                    <h2 class="profile-name">Test</h2>
+                    <p class="profile-email">test@example.com</p>
+                    <p class="profile-joined">Joined: Jan 15, 2023</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Photos</span>
+                            <span class="stat-value" id="photoCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Albums</span>
+                            <span class="stat-value" id="albumCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Likes Received</span>
+                            <span class="stat-value" id="likesCount">0</span>
+                        </div>
+                    </div>
+                    
+                    <button class="avatar-change-btn" id="changeAvatarBtn">Change Avatar</button>
+                </div>
+                
+                <div class="profile-content">
+                    <h2 class="section-title">Account Settings</h2>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-input" value="Test">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="test@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" placeholder="Enter new password">
+                        </div>
+                        <button type="button" class="upload-btn form-submit">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 CloudSnap. All rights reserved.</p>
+            <p>Securely store, organize, and share your memories.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
