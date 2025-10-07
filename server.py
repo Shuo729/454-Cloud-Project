@@ -43,10 +43,6 @@ def home():
 def home():
     return render_template('albums.html')
 
-@app.route('/photo')
-def home():
-    return render_template('photo.html')
-
 
 
 if __name__ == '__main__':
