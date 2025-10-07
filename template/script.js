@@ -140,4 +140,38 @@ function handleLogout() {
     }
 }
 
+function sendPhoto(event) {
+    event.preventDefault();
+
+    const fileInput = document.getElementById('file-input'); 
+    if (!fileInput.files.length) {
+        alert('Please choose a file first!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]); 
+    fetch('http://127.0.0.1:5000/upload', { 
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json()) 
+    .then(data => {
+        if (data.url) { 
+            const mess = document.getElementById('diet'); 
+            mess.innerHTML = `<p>Upload successful! <a href="${data.url}" target="_blank">View Photo</a></p>`;
+        } 
+        else {
+            alert('Upload failed: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch((error) => {
+        alert('Upload failed: ' + error);
+    });
+}
+
+
+
+
 document.addEventListener('DOMContentLoaded', init);
+
