@@ -25,6 +25,12 @@ const photoCount = document.getElementById('photoCount');
 const albumCount = document.getElementById('albumCount');
 const likesCount = document.getElementById('likesCount');
 const changeAvatarBtn = document.getElementById('changeAvatarBtn');
+const chooseButton = document.getElementById('choose-button');
+const fileInput = document.getElementById('file-input');
+const uploadButton = document.getElementById('upload-button');
+const statusMessage = document.getElementById('status-message');
+const previewContainer = document.getElementById('image-preview');
+let selectedFile = null;
 
 // Initialization
 function init() {
@@ -151,7 +157,7 @@ function sendPhoto(event) {
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]); 
-    fetch('http://127.0.0.1:5000/upload', { 
+    fetch('http://127.0.0.1:5000/upload-image', { 
         method: 'POST',
         body: formData
     })
@@ -169,8 +175,6 @@ function sendPhoto(event) {
         alert('Upload failed: ' + error);
     });
 }
-
-
 
 
 document.addEventListener('DOMContentLoaded', init);

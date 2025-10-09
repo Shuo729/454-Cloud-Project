@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from google.cloud import storage
 import os
+from werkzeug.security import check_password_hash
 
 
 app = Flask(__name__)
@@ -56,6 +57,44 @@ def login():
     return render_template('login.html')
 
 
+def login_form():
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return jsonify({'success': True, 'redirect': url_for('home')})
+        else:
+            return jsonify({'success': False, 'error': 'Invalid username or password'}), 401
+
+    return render_template('login.html')
+
+
+@app.route('/signup-form', methods=['GET', 'POST'])
+def signup_form():
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+
+        if User.query.filter_by(username=username).first():
+            return jsonify({'success': False, 'error': 'Username already exists'}), 400
+
+        hashed_password = generate_password_hash(password)
+
+        new_user = User(username=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['user_id'] = new_user.id
+
+        return jsonify({'success': True, 'redirect': url_for('home')})
+
+    return render_template('signup.html')
 
 
 
@@ -86,7 +125,7 @@ def albums():
 
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload-image', methods=['POST'])
 def upload_photo():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
