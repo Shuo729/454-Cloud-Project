@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudSnap - Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>📸 CloudSnap</h1>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('albums') }}">Albums</a></li>
+          <li><a href="{{ url_for('upload') }}">Upload</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h2>Welcome to CloudSnap 🌤️</h2>
+      <p>Share your moments with the world. Upload, organize, and relive your memories securely — all in one place.</p>
+      <a href="{{ url_for('upload') }}" class="cta-btn">Start Uploading</a>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <h3>📂 Easy Uploads</h3>
+        <p>Drag and drop your favorite photos to the cloud effortlessly.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔒 Secure Storage</h3>
+        <p>Your memories are encrypted and stored safely in the cloud.</p>
+      </div>
+      <div class="feature-card">
+        <h3>💬 Social Sharing</h3>
+        <p>Share your albums with friends and family instantly.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 CloudSnap. All rights reserved.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
