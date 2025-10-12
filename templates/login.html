@@ -1,23 +1,49 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
+<body> 
+  <div class="container">
+    <div class="form-container">
 
-<body>
-      <form id="login-form">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit" id="login-btn" onclick="navigate(event)">Login</button>
-    </form>
+      <div class="form-header">
+        <p>Please enter your details</p>
+        <h1>Welcome Back</h1>
+      </div>
+
+      <form class="form-box">
+        <div class="input-group">
+          <input type="email" id="email" class="input-field" placeholder="" required>
+          <label for="email" class="floating-label">Email Address</label>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="password" class="input-field" placeholder="" required>
+          <label for="password" class="floating-label">Password</label>
+           
+        </div>
+
+        <div class="input-group checkbox-group">
+          <div class="form-col remember-me">
+            <input type="checkbox" id="remember-me-checkbox" class="checkbox-field">
+            <label for="remember-me-checkbox">Remember me</label>
+          </div>
+          <div class="form-col">
+            <a href="#" class="form-link">Forgot password?</a>
+          </div>
+        </div>
+
+        <button type="submit" class="form-btn form-btn--submit">Sign In</button>
+      </form>  
+      <div class="form-divider"><p> OR </p></div>
+      
+      <p>Don't have an account? <a href="#" class="form-link">Sign up</a></p>
+    </div>
+    </div> 
+  </div> 
 </body>
-
-<script src="../scripts/login.js"></script>
-
-
-
-
 </html>
