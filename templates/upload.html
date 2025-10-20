@@ -3,32 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CloudSnap - Photo Sharing</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>CloudSnap - Upload Photo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <div class="header-container">
-            <h1></h1>
-        </div>
-
-         
-        
-        
+      <div class="header-container">
+        <a href="{{ url_for('home') }}" class="logo">CloudSnap</a>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('albums') }}">Albums</a></li>
+            <li><a href="{{ url_for('upload') }}">Upload</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-    <div class="user-actions">
+    <main class="container">
+        <div class="upload-container">
+            <h2>Upload a New Photo</h2>
+            <p>Select an image from your device to upload to CloudSnap.</p>
             <div class="upload-controls">
-            <p>Select an image to upload</p>
-            <button id="choose-button">Choose Image</button>
-            <input type="file" id="file-input" accept="image/*" style="display:none">
-            <button id="upload-button">Upload</button>
+                <button id="choose-button">Choose Image</button>
+                <input type="file" id="file-input" accept="image/*" style="display:none">
+                <button id="upload-button">Upload</button>
+            </div>
+             <div id="diet"></div>
         </div>
-
-<script src="../script.js"></script>
-
-
-    </body>
-
-
+    </main>
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</body>
 </html>

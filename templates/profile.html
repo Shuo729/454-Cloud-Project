@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('home') }}" class="logo">CloudSnap</a>
+            <nav class="nav-menu">
+                <a href="{{ url_for('home') }}" class="nav-item">Home</a>
+                <a href="{{ url_for('albums') }}" class="nav-item">Albums</a>
+            </nav>
+            <div class="user-actions">
+                <a href="{{ url_for('upload') }}" class="upload-btn">Upload</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-container">
+            <aside class="profile-sidebar">
+                <div class="profile-avatar-large"></div>
+                <h2 class="profile-name">{{ user.username }}</h2>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Photos</span>
+                        <span class="stat-value">{{ user.photos|length }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Albums</span>
+                        <span class="stat-value">0</span> </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Likes</span>
+                        <span class="stat-value">0</span> </div>
+                </div>
+                <button class="avatar-change-btn">Change Avatar</button>
+            </aside>
+
+            <div class="profile-content">
+                <h3 class="section-title">Your Photos</h3>
+                <div class="content-grid">
+                    {% for photo in user.photos %}
+                    <div class="photo-card">
+                        <img src="{{ photo.url }}" alt="User Photo" class="photo-image">
+                        <div class="photo-info">
+                            <p class="photo-description">{{ photo.filename }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>You haven't uploaded any photos yet. <a href="{{ url_for('upload') }}">Upload one now!</a></p>
+                    {% endfor %}
+                </div>
+
+                <h3 class="section-title" style="margin-top: 40px;">Account Settings</h3>
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" class="form-input" value="{{ user.username }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">New Password</label>
+                        <input type="password" id="password" class="form-input" placeholder="Enter a new password">
+                    </div>
+                    <button type="submit" class="upload-btn form-submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 CloudSnap. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -6,7 +6,7 @@
   <title>Login</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
-<body> 
+<body>
   <div class="container">
     <div class="form-container">
 
@@ -15,16 +15,15 @@
         <h1>Welcome Back</h1>
       </div>
 
-      <form class="form-box">
+      <form id="login-form" class="form-box">
         <div class="input-group">
-          <input type="email" id="email" class="input-field" placeholder="" required>
-          <label for="email" class="floating-label">Email Address</label>
+          <input type="text" id="username" class="input-field" placeholder="" required>
+          <label for="username" class="floating-label">Username</label>
         </div>
 
         <div class="input-group">
           <input type="password" id="password" class="input-field" placeholder="" required>
           <label for="password" class="floating-label">Password</label>
-           
         </div>
 
         <div class="input-group checkbox-group">
@@ -38,12 +37,12 @@
         </div>
 
         <button type="submit" class="form-btn form-btn--submit">Sign In</button>
-      </form>  
+      </form>
       <div class="form-divider"><p> OR </p></div>
-      
-      <p>Don't have an account? <a href="#" class="form-link">Sign up</a></p>
+
+      <p>Don't have an account? <a href="{{ url_for('signup') }}" class="form-link">Sign up</a></p>
     </div>
-    </div> 
-  </div> 
+  </div>
+  <script src="{{ url_for('static', filename='scripts/login.js') }}"></script>
 </body>
 </html>
