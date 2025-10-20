@@ -4,19 +4,28 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
+from google.cloud import storage
 import os
+import uuid
+
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///photos.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.secret_key = 'supersecretkey'
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', 'uploads')
+app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')
+
+USE_GCS = os.environ.get('USE_GCS', 'false').lower() == 'true'
+GCS_BUCKET = os.environ.get('GCS_BUCKET', None)
 
 db = SQLAlchemy(app)
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+if not USE_GCS:
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +37,8 @@ class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    url = db.Column(db.String(500), nullable=True)  
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -40,6 +51,18 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def upload_to_gcs(file, filename):
+    """Upload a file to Google Cloud Storage and return its public URL."""
+    client = storage.Client()
+    bucket = client.bucket(GCS_BUCKET)
+    blob = bucket.blob(filename)
+    blob.upload_from_file(file, content_type=file.content_type)
+    blob.make_public()
+    return blob.public_url
+
+# ---------------------
+# Routes
+# ---------------------
 @app.route('/')
 def root():
     return redirect(url_for('login'))
@@ -122,30 +145,33 @@ def upload_photo():
         return jsonify({'error': 'No file uploaded'}), 400
 
     file = request.files['file']
-
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
-
     if not allowed_file(file.filename):
         return jsonify({'error': 'File type not allowed'}), 400
 
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
+    unique_name = f"{uuid.uuid4()}_{secure_filename(file.filename)}"
+
+    if USE_GCS and GCS_BUCKET:
+        file_url = upload_to_gcs(file, unique_name)
+    else:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_name)
+        file.save(filepath)
+        file_url = f"/{app.config['UPLOAD_FOLDER']}/{unique_name}"
 
     user_id = session.get('user_id')
-    new_photo = Photo(filename=filename, user_id=user_id)
+    new_photo = Photo(filename=unique_name, user_id=user_id, url=file_url)
     db.session.add(new_photo)
     db.session.commit()
 
-    file_url = f"/{app.config['UPLOAD_FOLDER']}/{filename}"
     return jsonify({'url': file_url})
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all() 
-    app.run(debug=True)
+        db.create_all()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
