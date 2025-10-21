@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-R">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albums Page</title>
+    <title>Your Albums</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <header>
+      <div class="header-container">
+        <a href="{{ url_for('home') }}" class="logo">CloudSnap</a>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('albums') }}">Albums</a></li>
+            <li><a href="{{ url_for('upload') }}">Upload</a></li>
+            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-    <div id="albumsTab" class="tab-content" style="display: none;">
-        <div class="section-header">
-            <h1 class="section-title">Your Albums</h1>
-            <div class="album-create">
-                <input type="text" class="album-input" id="albumName" placeholder="Album name">
-                <button class="upload-btn" id="createAlbumBtn">Create Album</button>
+    <main class="container">
+        <div class="profile-content"> <div class="section-header">
+                <h1 class="section-title">Your Albums</h1>
+                <form class="album-create" style="display: flex; gap: 10px;">
+                    <input type="text" class="form-input" id="albumName" placeholder="New album name">
+                    <button type="submit" class="upload-btn" id="createAlbumBtn">Create</button>
+                </form>
+            </div>
+            
+            <div class="content-grid" id="albumsGrid">
+                <p>You haven't created any albums yet.</p>
             </div>
         </div>
-        
-        <div class="content-grid" id="albumsGrid">
-        </div>
-    </div>
+    </main>
 
-    <script src="../script.js"></script>
-
-
-</body>
+    <footer>
+        <p>© 2025 CloudSnap. All rights reserved.</p>
+    </footer>
+    
+    </body>
 </html>

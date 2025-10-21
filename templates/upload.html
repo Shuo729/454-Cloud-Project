@@ -28,11 +28,25 @@
             <div class="upload-controls">
                 <button id="choose-button">Choose Image</button>
                 <input type="file" id="file-input" accept="image/*" style="display:none">
-                <button id="upload-button">Upload</button>
+                <button id="upload-button" style="display:none;">Upload</button>
             </div>
-             <div id="diet"></div>
+            <div id="diet"></div>
+        </div>
+
+        <div id="preview-modal" class="modal-overlay hidden">
+          <div class="modal-content">
+            <span id="modal-close-btn" class="modal-close-btn">&times;</span>
+            <h3>Confirm Your Upload</h3>
+            <div class="modal-preview-image">
+              <img src="" alt="Image Preview" id="modal-image-preview">
+            </div>
+            <div class="modal-actions">
+              <button id="modal-change-btn" class="logout-btn">Change Photo</button>
+              <button id="modal-confirm-btn" class="upload-btn">Upload</button>
+            </div>
+          </div>
         </div>
     </main>
-    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/upload.js') }}"></script>
 </body>
 </html>
