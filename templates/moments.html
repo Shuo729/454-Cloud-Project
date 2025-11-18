@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CloudSnap - Upload Photo</title>
+    <title>Moments</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -12,8 +12,8 @@
         <a href="{{ url_for('home') }}" class="logo">CloudSnap</a>
         <nav>
           <ul>
-            <li><a href="{{ url_for('moments') }}">Moments</a></li>
             <li><a href="{{ url_for('albums') }}">Albums</a></li>
+            <li><a href="{{ url_for('upload') }}">Upload</a></li>
             <li><a href="{{ url_for('profile') }}">Profile</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
@@ -21,32 +21,34 @@
       </div>
     </header>
 
-    <main class="container">
-        <div class="upload-container">
-            <h2>Upload a New Photo</h2>
-            <p>Select an image from your device to upload to CloudSnap.</p>
-            <div class="upload-controls">
-                <button id="choose-button">Choose Image</button>
-                <input type="file" id="file-input" accept="image/*" style="display:none">
-                <button id="upload-button" style="display:none;">Upload</button>
-            </div>
-            <div id="diet"></div>
+    <div class="container moments-container">
+        <h1>Share a Moment</h1>
+        
+        <form id="create-moment-form" class="post-form">
+            <textarea id="moment-text" placeholder="What's on your mind?" rows="4" required></textarea>
+            <input type="file" id="moment-photo" accept="image/png, image/jpeg, image/gif">
+            <button type="submit">Post Moment</button>
+        </form>
+        
+        <div id="moment-feed-container" class="moment-feed">
+            <p>Loading moments...</p>
         </div>
+    </div>
 
-        <div id="preview-modal" class="modal-overlay hidden">
-          <div class="modal-content">
+    <script src="{{ url_for('static', filename='scripts/moments.js') }}"></script>
+
+    <div id="preview-modal" class="modal-overlay hidden">
+        <div class="modal-content">
             <span id="modal-close-btn" class="modal-close-btn">&times;</span>
-            <h3>Confirm Your Upload</h3>
+            <h3>Photo Preview</h3>
             <div class="modal-preview-image">
               <img src="" alt="Image Preview" id="modal-image-preview">
             </div>
             <div class="modal-actions">
               <button id="modal-change-btn" class="logout-btn">Change Photo</button>
-              <button id="modal-confirm-btn" class="upload-btn">Upload</button>
+              <button id="modal-confirm-btn" class="upload-btn">Confirm</button>
             </div>
           </div>
-        </div>
-    </main>
-    <script src="{{ url_for('static', filename='scripts/upload.js') }}"></script>
-</body>
+      </div>
+  </body>
 </html>

@@ -485,6 +485,112 @@ main {
     gap: 15px;
 }
 
+/* Moments Page */
+.moments-container { 
+    max-width: 600px; 
+    margin: 20px auto; 
+}
+
+.post-form { 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+.post-form textarea { 
+    width: 100%; 
+    box-sizing: border-box; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+}
+.post-form input[type="file"] { 
+    margin-bottom: 10px; 
+}
+.post-form button { 
+    background: #007bff; 
+    color: #fff; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+.moment-feed { 
+    margin-top: 20px; 
+}
+.moment { 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    margin-bottom: 15px; 
+}
+.moment-header { 
+    font-weight: bold; 
+    margin-bottom: 5px; 
+}
+.moment-timestamp { 
+    font-size: 0.8em; 
+    color: #666; 
+    margin-bottom: 10px; 
+}
+.moment-body p { 
+    margin-bottom: 10px; 
+    word-wrap: break-word; 
+}
+.moment-body img { 
+    max-width: 100%; 
+    border-radius: 8px; 
+    margin-top: 10px; 
+}
+.moment-actions { 
+    display: flex; 
+    gap: 15px; 
+    border-top: 1px solid #eee; 
+    padding-top: 10px; 
+    margin-top: 10px; 
+}
+.like-btn { 
+    cursor: pointer; 
+}
+.like-btn.liked { 
+    color: #007bff; 
+    font-weight: bold; 
+}
+.comments-section { 
+    margin-top: 15px; 
+}
+.comment { 
+    font-size: 0.9em; 
+    background: #f9f9f9; 
+    padding: 8px; 
+    border-radius: 4px; 
+    margin-bottom: 5px; 
+    word-wrap: break-word; 
+}
+.comment-author { 
+    font-weight: bold; 
+}
+.comment-form { 
+    display: flex; 
+    margin-top: 10px; 
+}
+.comment-form input { 
+    flex-grow: 1; 
+    border: 1px solid #ccc; 
+    padding: 8px; 
+    border-radius: 4px; 
+}
+.comment-form button { 
+    background: #555; 
+    color: #fff; 
+    border: none; 
+    padding: 8px; 
+    margin-left: 5px; 
+    border-radius: 4px; 
+}
+
 /* FOOTER */
 footer {
     background-color: white;

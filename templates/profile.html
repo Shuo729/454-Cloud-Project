@@ -12,6 +12,7 @@
             <a href="{{ url_for('home') }}" class="logo">CloudSnap</a>
             <nav class="nav-menu">
                 <a href="{{ url_for('home') }}" class="nav-item">Home</a>
+                <a href="{{ url_for('moments') }}" class="nav-item">Moments</a>
                 <a href="{{ url_for('albums') }}" class="nav-item">Albums</a>
             </nav>
             <div class="user-actions">
@@ -44,7 +45,7 @@
             <div class="profile-content">
                 <h3 class="section-title">Your Photos</h3>
                 <div class="content-grid">
-                    {% for photo in user.photos %}
+                    {% for photo in photos %}
                     <div class="photo-card">
                         <img src="{{ photo.url }}" alt="User Photo" class="photo-image">
                         <div class="photo-info">

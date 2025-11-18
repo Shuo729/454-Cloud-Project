@@ -3,3 +3,6 @@
 
 # Uploaded files
 /uploads/
+
+# GC Service Account Key
+service-account-key.json
