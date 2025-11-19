@@ -10,6 +10,7 @@ import pg8000
 import os
 import uuid
 from datetime import datetime, timezone, timedelta
+from google.oauth2 import service_account
 
 #load environment variables
 INSTANCE_CONNECTION_NAME = "single-archive-476003-d7:us-west1:snapclouddb"
@@ -17,6 +18,7 @@ DB_USER = "testuser"
 DB_PASSWORD = "Thisisatest1*" 
 DB_NAME = "snapclouddb"
 GCP_PROJECT_ID = "single-archive-476003-d7"
+SERVICE_ACCOUNT_KEY_FILE = 'service-account-key.json'
 
 
 app = Flask(__name__)
@@ -117,7 +119,8 @@ def login_required(f):
 
 def upload_to_gcs(file, filename, bucket_name):
     """Upload a file to Google Cloud Storage and return its public URL."""
-    client = storage.Client(project=GCP_PROJECT_ID)
+    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
+    client = storage.Client(project=GCP_PROJECT_ID, credentials=credentials)
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(filename)
     blob.upload_from_file(file, content_type=file.content_type)
@@ -125,7 +128,8 @@ def upload_to_gcs(file, filename, bucket_name):
 
 def generate_signed_url(filename, bucket_name):
     """Generates a v4 signed URL for a private GCS object."""
-    client = storage.Client(project=GCP_PROJECT_ID)
+    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_KEY_FILE)
+    client = storage.Client(project=GCP_PROJECT_ID, credentials=credentials)
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(filename)
 
