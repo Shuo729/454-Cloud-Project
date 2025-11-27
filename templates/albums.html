@@ -39,6 +39,16 @@
     <footer>
         <p>© 2025 CloudSnap. All rights reserved.</p>
     </footer>
+
+    <div id="photoModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalAlbumName"></h2>
+            <div id="modalPhotos" class="modal-photos"></div>
+        </div>
+    </div>
+       
+    <script src="{{ url_for('static', filename='scripts/albums.js') }}"></script>
     
     </body>
 </html>
