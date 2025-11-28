@@ -681,6 +681,25 @@ footer {
     background: #0056b3; 
 }
 
+.photo-scroll-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.profile-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #ddd;
+    margin: 0 auto 20px;
+    border: 3px solid var(--primary-light);
+    display: block;
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {

@@ -95,6 +95,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    avatar_url = db.Column(db.String(500), nullable=True)
     photos = db.relationship('Photo', backref='owner', lazy=True)
     moments = db.relationship('Moment', back_populates='author', lazy='dynamic', cascade="all, delete-orphan")
     comments = db.relationship('Comment', back_populates='author', lazy='dynamic', cascade="all, delete-orphan")
@@ -171,14 +172,74 @@ def profile():
     for photo in user.photos:
         try:
             signed_url = generate_signed_url(photo.url, bucket_name)
+            display_name = photo.filename.split('_', 1)[1] if '_' in photo.filename else photo.filename
             photos_for_template.append({
-                'filename': photo.filename,
+                'filename': display_name,
                 'url': signed_url
             })
         except Exception as e:
             print(f"Error generating signed URL for {photo.url}: {e}")
     
-    return render_template('profile.html', user=user, photos=photos_for_template)
+    # Avatar URL
+    avatar_url = None
+    if user.avatar_url:
+         try:
+            avatar_url = generate_signed_url(user.avatar_url, bucket_name)
+         except Exception as e:
+            print(f"Error generating avatar URL: {e}")
+
+    # Calculate Stats
+    likes_count = user.liked_moments.count()
+    albums_count = 0
+
+    return render_template('profile.html', user=user, avatar_url=avatar_url, photos=photos_for_template, likes_count=likes_count, albums_count=albums_count)
+
+@app.route('/api/update-profile', methods=['POST'])
+@login_required
+def update_profile():
+    data = request.get_json()
+    new_password = data.get('password')
+    
+    if not new_password:
+        return jsonify({'success': False, 'error': 'Password is required'}), 400
+        
+    if len(new_password) > 64:
+         return jsonify({'success': False, 'error': 'Password is too long'}), 400
+
+    user = db.session.get(User, session['user_id'])
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+    
+    return jsonify({'success': True})
+
+@app.route('/api/upload-avatar', methods=['POST'])
+@login_required
+def upload_avatar():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+        
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if not allowed_file(file.filename):
+        return jsonify({'error': 'File type not allowed'}), 400
+
+    unique_name = f"avatar_{session['user_id']}_{uuid.uuid4()}_{secure_filename(file.filename)}"
+    
+    try:
+        uploaded_filename = upload_to_gcs(file, unique_name, bucket_name)
+    except Exception as e:
+        return jsonify({'error': f'Failed to upload to GCS: {e}'}), 500
+
+    user = db.session.get(User, session['user_id'])
+    user.avatar_url = uploaded_filename
+    db.session.commit()
+    
+    try:
+        signed_url = generate_signed_url(uploaded_filename, bucket_name)
+        return jsonify({'success': True, 'url': signed_url})
+    except Exception as e:
+         return jsonify({'error': f'Failed to generate URL: {e}'}), 500
 
 @app.route('/upload')
 @login_required
@@ -210,6 +271,11 @@ def signup_form():
 
     if not username or not password:
         return jsonify({'success': False, 'error': 'Missing username or password'}), 400
+    
+    if len(username) > 80:
+        return jsonify({'success': False, 'error': 'Username must be under 80 characters'}), 400
+    if len(password) > 64:
+        return jsonify({'success': False, 'error': 'Password is too long'}), 400
 
     if User.query.filter_by(username=username).first():
         return jsonify({'success': False, 'error': 'Username already exists'}), 400
@@ -231,7 +297,7 @@ def login_form():
     user = User.query.filter_by(username=username).first()
     if user and check_password_hash(user.password, password):
         session['user_id'] = user.id
-        return jsonify({'success': True, 'redirect': url_for('profile')})
+        return jsonify({'success': True, 'redirect': url_for('home')})
     else:
         return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
@@ -333,6 +399,8 @@ def create_moment():
         return jsonify({'error': 'No text provided'}), 400
 
     text = request.form['text']
+    if len(text) > 500:
+        return jsonify({'error': 'Moment text exceeds 500 character limit'}), 400
     user_id = session['user_id']
     photo_url = None
 
@@ -392,7 +460,8 @@ def post_comment(moment_id):
     data = request.get_json()
     if not data or 'text' not in data or not data['text']:
         return jsonify({'error': 'Comment text is required'}), 400
-
+    if len(data['text']) > 300:
+        return jsonify({'error': 'Comment text exceeds 300 character limit'}), 400
     moment = Moment.query.get_or_404(moment_id)
     user_id = session['user_id']
     

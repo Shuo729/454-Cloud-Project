@@ -1,3 +1,12 @@
+const escapeHtml = (unsafe) => {
+    return String(unsafe)
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // Get elements from moments.html
@@ -91,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         moment.comments.forEach(comment => {
             commentsHtml += `
                 <div class="comment" data-comment-id="${comment.id}">
-                    <span class="comment-author">${comment.author_username}:</span>
-                    <span>${comment.text}</span>
+                    <span class="comment-author">${escapeHtml(comment.author_username)}:</span>
+                    <span>${escapeHtml(comment.text)}</span>
                 </div>
             `;
         });
@@ -100,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const likeButtonClass = moment.is_liked_by_user ? 'like-btn liked' : 'like-btn';
 
         momentDiv.innerHTML = `
-            <div class="moment-header">${moment.author_username}</div>
+            <div class="moment-header">${escapeHtml(moment.author_username)}</div>
             <div class="moment-timestamp">${timestamp}</div>
             <div class="moment-body">
-                <p>${moment.text}</p>
+                <p>${escapeHtml(moment.text)}</p>
                 ${photoHtml}
             </div>
             <div class="moment-actions">
@@ -224,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 commentElement.className = 'comment';
                 commentElement.dataset.commentId = newComment.id;
                 commentElement.innerHTML = `
-                    <span class="comment-author">${newComment.author_username}:</span>
-                    <span>${newComment.text}</span>
+                    <span class="comment-author">${escapeHtml(newComment.author_username)}:</span>
+                    <span>${escapeHtml(newComment.text)}</span>
                 `;
                 
                 const commentsSection = commentForm.closest('.comments-section');
